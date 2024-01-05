@@ -1,0 +1,84 @@
+package BlockChain;
+
+import java.nio.charset.StandardCharsets; 
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.util.Date;
+
+public class Block {
+
+	private String hash;
+	private String previousHash;
+	private String data;
+	private Date timeStamp;
+	private boolean durum = true;
+
+	public Block(String data, Date timeStamp) {
+
+		this.timeStamp = timeStamp;
+		this.data = data;
+		this.hash = computeHash();
+		this.durum = durum;
+
+	}
+
+	public String computeHash() {
+
+		String string =this.data + this.previousHash + timeStamp ;
+
+		MessageDigest digest;
+		String encoded = null;
+
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+			byte hash[] = digest.digest(string.getBytes(StandardCharsets.UTF_8));
+			encoded = Base64.getEncoder().encodeToString(hash);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		this.hash = encoded;
+		return encoded;
+	}
+
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
+
+	public String getPreviousHash() {
+		return previousHash;
+	}
+
+	public void setPreviousHash(String previousHash) {
+		this.previousHash = previousHash;
+	}
+
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+
+	public Date getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(Date timeStamp) {
+		this.timeStamp = timeStamp;
+	}
+	
+	public boolean getdurum() {
+		return durum;
+	}
+	
+	public void setdurum(boolean durum) {
+		this.durum = durum;
+	}
+
+}
