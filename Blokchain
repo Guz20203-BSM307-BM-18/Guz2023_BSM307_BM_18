@@ -1,0 +1,119 @@
+package BlockChain;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class BlockChain {
+
+	public static void main(String[] args) {
+		System.out.println();
+
+		Chain blockChain = new Chain();
+
+		Scanner input = new Scanner(System.in);
+		
+		
+		/*
+
+			1- Bu projeye baslamadan once eksik bildiginiz konular nelerdi? 
+			
+			2- Bu projenin asamalarinda karsilastiginiz zorluklar nelerdi?
+
+		  
+		  */
+
+		System.err.print("KAC NODE(DUGUMLUK) BLOKZINCIRI OLUSTURULSUN : ");
+		int nodeSayisi = input.nextInt();
+
+		ArrayList<Integer> bakiyeler = new ArrayList<>();
+		String[][] nodeVeIndisler = new String[nodeSayisi][2];
+		String[] baglantı = new String[(nodeVeIndisler.length * (nodeVeIndisler.length - 1))];
+
+		String islemYolu = "";
+		int miktar = 0;
+		int gonderen = 0 , gondereIndex = 0;
+		int alici = 0 , aliciIndex = 0;
+		
+		boolean durum;
+		
+		
+
+		while (!islemYolu.equals("0")) {
+
+			String ıslem = "";
+
+			int toplamYonSayisi = (int) Math.pow(2, nodeSayisi) - 2;
+			
+			for (int counter = 0; counter < toplamYonSayisi; counter++) {
+				Block BLOCK = new Block(ıslem, new java.util.Date());
+				blockChain.addBlock(BLOCK);
+			}
+
+			blockChain.yanars(nodeSayisi, bakiyeler, baglantı, nodeVeIndisler);
+
+			input.nextLine();
+			System.out.println("\n\n\n");
+			System.out.print("HANGI NODE(DUGUM)'LER ARASI ISLEM YAPILSIN : ");
+			islemYolu = input.nextLine();
+
+			if (islemYolu.equals("0")) {
+				break;
+			}
+
+			String[] splitBaglanti = islemYolu.split("-");
+
+			String yol1 = splitBaglanti[0];
+			String yol2 = splitBaglanti[1];
+
+			for (int counter = 0; counter < nodeVeIndisler.length; counter++) {
+
+				if (nodeVeIndisler[counter][0].equals(yol1)) {
+					// System.out.println("BORCLU ="+nodeVeIndisler[counter][1]);
+					gonderen = Integer.parseInt(nodeVeIndisler[counter][1]);
+					gondereIndex = counter;
+					
+				} else if (nodeVeIndisler[counter][0].equals(yol2)) {
+					//System.out.println("ALAN = " + nodeVeIndisler[counter][1]);
+					alici = Integer.parseInt(nodeVeIndisler[counter][1]);
+					aliciIndex = counter;
+				}
+
+			}
+			
+			System.out.print("MIKTAR GIRINIZ : ");
+			miktar = input.nextInt();
+			
+			while (miktar > gonderen || miktar < 0) {
+				System.err.println("LIMIT YETERSIZ TEKRAR GIRINIZ : ");
+				miktar = input.nextInt();
+			}
+			
+			int gondereParaMiktari = bakiyeler.get(gondereIndex);
+			
+			int aliciParaMiktari = bakiyeler.get(aliciIndex);
+			
+
+			bakiyeler.set(gondereIndex , gondereParaMiktari - miktar);
+			bakiyeler.set(aliciIndex , aliciParaMiktari + miktar);
+			
+			nodeVeIndisler[gondereIndex][1] = String.valueOf(gondereParaMiktari - miktar);
+			nodeVeIndisler[aliciIndex][1] = String.valueOf(aliciParaMiktari + miktar);
+			
+			Block BLOCK = new Block(ıslem, new java.util.Date());
+			blockChain.addBlock(BLOCK);
+			
+			
+			/*
+		  	4- Projeniz fikrinin ne kadarlik kismini tamamlayabildiniz? Varsa, eksiklikleriniz nelerdir?
+
+			5- Proje tamamlandiktan sonra ogrenmis oldugunuz kazanimlar nelerdir?
+		  
+		  */
+		
+			
+			
+			
+		}
+
+	}
+}
